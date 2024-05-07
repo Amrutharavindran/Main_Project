@@ -1,0 +1,82 @@
+{#<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">#}
+{#<html xmlns="http://www.w3.org/1999/xhtml">#}
+{#<head>#}
+{#<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />#}
+{#<title>Untitled Document</title>#}
+{#</head>#}
+
+{#<body>#}
+{% extends 'Admin/adminindex.html' %}
+{% block body %}
+<form id="form1" name="form1" method="post" action="/search_loc#about">
+   <table class="table  table-dark table-stripped" cellspacing="0" width="100%">
+
+    <tr align="center">
+         <th  colspan="8" style="text-align: center; font-size: 30px; text-decoration: underline;">VIEW IMPORTANT LOCATIONS</th>
+{#         <th  colspan="9" style="text-align: center; font-size: 30px; text-decoration: underline;">VIEW IMPORTANT LOCATIONS</th>&nbsp;<a href="/map1#about" class="btn btn-info" style="align-items: inherit;">Add+</a></span></th>#}
+        <td style="width: 10%; text-align: right;"><a href="/map1#about" class="btn btn-info" style="align-items: inherit;">Add+</a></td>
+
+           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+    </tr>
+    <tr>
+      <td colspan="9" STYLE="align-items: flex-end">Enter Name
+        <label>
+        <input type="text" name="textfield" value="{{ request.POST.textfield }}" required/>
+        <input type="submit" name="Submit" value="Search" class="btn btn-outline-primary"/>
+      </label></td>
+    </tr>
+    <tr>
+
+          <td>No</td>
+      <td style="width: 20%">NAME </td>
+      <td style="width: 20%">LATITUDE</td>
+      <td style="width: 20%">LONGITUDE</td>
+      <td style="width: 20%">DESCRPTION</td>
+      <td style="width: 20%">DATE</td>
+      <td ></td><td></td>
+        <td></td>
+    </tr>
+       {% for i in my_objects %}
+    <tr>
+    <td >{{ my_objects.start_index|add:forloop.counter0 }}</td>
+        <td align="center"> <img src="{{ i.photo.url }}" height="100px" width="100px"><br>{{i.Name}}</td>
+{#      <td style="width: 20%">{{i.Name}}</td>#}
+      <td style="width: 20%">{{i.Latitude}}</td>
+      <td style="width: 20%">&nbsp;{{i.Longitude}}</td>
+      <td style="width: 20%">&nbsp;{{i.Description}}</td>
+      <td style="width: 20%">{{i.Date}}</td>
+      <td ><p><a href="editlocation/{{ i.id }}#about" class="btn btn-success" title="Edit"><i class="bi bi-pencil-square"></i></a></p>
+      <p ><a href="dltloc/{{ i.id }}"  button type="button" onclick="return confirm('Are you sure to delete')" class="btn btn-danger" title="Delete"><i class="bi bi-trash3-fill"></i></a></p></td>
+
+   <td></td>
+   <td></td>
+    </tr>
+
+       {% endfor %}
+
+     <tr>
+ <td colspan="9"><div class="pagination">
+    <span class="step-links">
+        {% if my_objects.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ my_objects.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ my_objects.number }} of {{ my_objects.paginator.num_pages }}.
+        </span>
+
+        {% if my_objects.has_next %}
+            <a href="?page={{ my_objects.next_page_number }}">next</a>
+            <a href="?page={{ my_objects.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div></td>
+  </tr>
+  </table>
+</form>
+
+{% endblock %}
+{#</body>#}
+{#</html>#}

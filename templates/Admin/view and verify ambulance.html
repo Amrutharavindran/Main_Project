@@ -1,0 +1,96 @@
+{#<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">#}
+{#<html xmlns="http://www.w3.org/1999/xhtml">#}
+{#<head>#}
+{#<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />#}
+{#<title>Untitled Document</title>#}
+{#</head>#}
+
+<body>
+{% extends 'Admin/adminindex.html' %}
+{% block body %}
+<form id="form1" name="form1" method="post" action="/search_ambulance#about">
+<div style="overflow:scroll; height:500px;">
+  <table width="489" height="146" border="1" class="table  table-dark table-stripped">
+        <th  colspan="20" style="text-align: center; font-size: 30px; text-decoration: underline;">VIEW & VERIFY AMBULANCE</th>
+
+    <tr>
+      <td colspan="13">Enter name or place
+        <label>
+        <input type="text" name="textfield" class="styled-textfield" value="{{ request.POST.textfield }}" required/>
+        <input type="submit" name="Submit" value="Search" class="btn btn-outline-primary"/>
+      </label></td>
+    </tr>
+    <tr>
+
+
+      <td>No</td>
+      <td>Name</td>
+      <td>Address</td>
+      <td>Date-of-Birth</td>
+         <td>Age</td>
+      <td>Phone number </td>
+      <td>Email</td>
+      <td>Licence</td>
+        <td>Make and Model</td>
+        <td>Type of Ambulance</td>
+        <td>Vehicle Registration Number</td>
+        <td>Proof of Ownership</td>
+        <td>Status</td>
+
+
+    </tr>
+    {% for i in my_objects %}
+    <tr>
+{#      <td>{{ forloop.counter }}</td>#}
+    <td>{{ my_objects.start_index|add:forloop.counter0 }}</td>
+
+          <td align="center"> <img src="{{ i.Photo.url }}" height="100px" width="100px"><br>{{ i.Firstname }} {{ i.Lastname }}</td>
+
+      <td>{{ i.Place }} {{ i.Post }} {{ i.Pin }}</td>
+      <td>{{ i.Dob }}</td>
+    <td>{{ i.age }}</td>
+      <td>&nbsp;{{ i.Phone}}</td>
+      <td>&nbsp;{{ i.Email}}</td>
+
+      <td><a href="{{ i.Id_proof.url }}">View Licence</a></td>
+     <td>{{ i.make_model}}</td>
+     <td>{{ i.Type}}</td>
+
+     <td>{{ i.vehicle_no}}</td>
+    <td><a href="{{i.ownership.url}}">View</a></td>
+
+
+
+
+             <td>{% if i.LOGIN.type == "ambulance" %} Approved <br><br><br><p><a href="/reject_ambulance/{{ i.LOGIN.id }}" button type="button" onclick="return confirm ('Are you sure to delete')"class="btn btn-danger" title="Reject"><i class="bi bi-trash"></i> </a></p> {% else %} <p><a href="/reject_ambulance/{{ i.LOGIN.id }}" button type="button" onclick="return confirm ('Are you sure to reject')"class="btn btn-danger" title="Reject"><i class="bi bi-x"></i> </a></p><br>
+      <p><a href="/admin_accept_ambulace/{{ i.LOGIN.id }}" class="btn btn-success" title="Approve" > <i class="bi bi-check2-circle"></i>  </a> </p> {% endif %}
+                 </td>
+
+    </tr>
+      {% endfor %}
+
+     <tr>
+ <td colspan="14"><div class="pagination">
+    <span class="step-links">
+        {% if my_objects.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ my_objects.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ my_objects.number }} of {{ my_objects.paginator.num_pages }}.
+        </span>
+
+        {% if my_objects.has_next %}
+            <a href="?page={{ my_objects.next_page_number }}">next</a>
+            <a href="?page={{ my_objects.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div></td>
+  </tr>
+
+  </table></div>
+</form>
+{% endblock %}
+{#</body>#}
+{#</html>#}

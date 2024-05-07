@@ -1,0 +1,263 @@
+{#{% load static %}#}
+{#<html>#}
+{#<head>#}
+{#    <title>Plot Path on Google Maps</title>#}
+{#    <style>#}
+{#        #map {#}
+{#            height: 400px;#}
+{#            width: 100%;#}
+{#        }#}
+{#    </style>#}
+{#</head>#}
+{#<body>#}
+{##}
+{#    <div id="map"></div>#}
+{##}
+{#    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB3y0szjZmNj_w2q9Vnc08ZL_FU6Z4VTFE&callback=initMap" async defer></script>#}
+{#    <script>#}
+{#        function initMap() {#}
+{#            var map = new google.maps.Map(document.getElementById('map'), {#}
+{#                center: {lat: {{lat}}, lng: {{long}},#}
+{##}
+{#                zoom: 12#}
+{#            });#}
+{##}
+{#            var addresses = [];#}
+{#            {% for i in p %}#}
+{#            addresses.push("{{i}}");#}
+{#            {% endfor %}#}
+{##}
+{##}
+{# var markers = [#}
+{#                {#}
+{#                    position: {lat: {{val.lat}}, lng: {{val.lat}}},#}
+{#                    icon: '{%  static 'bi22.png' %}'#}
+{#                }#}
+{#            ];#}
+{##}
+{##}
+{#            markers.forEach(function(markerInfo) {#}
+{#                var marker = new google.maps.Marker({#}
+{#                    position: markerInfo.position,#}
+{#                    map: map,#}
+{#                    icon: markerInfo.icon#}
+{#                });#}
+{#            });#}
+{##}
+{#            // Define addresses#}
+{##}
+{#            // Geocode addresses and plot path#}
+{#            geocodeAddresses(addresses, map);#}
+{#        }#}
+{#        var add_loc=[];#}
+{#        function geocodeAddresses(addresses, map) {#}
+{#            var geocoder = new google.maps.Geocoder();#}
+{#            var waypoints = [];#}
+{##}
+{#            // Geocode addresses asynchronously#}
+{#            addresses.forEach(function(address, index) {#}
+{#                var gg=address.split('**')#}
+{#                geocoder.geocode({'address': gg[0]}, function(results, status) {#}
+{#                    if (status === 'OK') {#}
+{#                        if (index === 0 || index === addresses.length - 1) {#}
+{#                            // Add start and end points as markers#}
+{#                            var marker = new google.maps.Marker({#}
+{#                                position: results[0].geometry.location,#}
+{#                                map: map,#}
+{#                                title: address#}
+{#                            });#}
+{#                        }#}
+{#                        add_loc.push(results[0].geometry.location)#}
+{#                        // Add waypoints for path#}
+{#                        waypoints.push({#}
+{#                            location: results[0].geometry.location,#}
+{#                            stopover: true#}
+{#                        });#}
+{##}
+{#                        // Plot path if all addresses have been geocoded#}
+{#                        if (waypoints.length === addresses.length) {#}
+{#                            plotPath(waypoints, map);#}
+{#                        }#}
+{#                    } else {#}
+{#                        console.log('Geocode was not successful for the following reason: ' + status);#}
+{#                    }#}
+{#                });#}
+{#            });#}
+{#        }#}
+{##}
+{#        function plotPath(waypoints, map) {#}
+{#            var directionsService = new google.maps.DirectionsService();#}
+{#            var directionsRenderer = new google.maps.DirectionsRenderer({#}
+{#                map: map#}
+{#            });#}
+{##}
+{#            var request = {#}
+{#                origin: waypoints[0].location,#}
+{#                destination: waypoints[waypoints.length - 1].location,#}
+{#                waypoints: waypoints.slice(1, -1),#}
+{#                travelMode: google.maps.TravelMode.DRIVING#}
+{#            };#}
+{##}
+{#            directionsService.route(request, function(result, status) {#}
+{#                if (status === 'OK') {#}
+{#                    directionsRenderer.setDirections(result);#}
+{#                } else {#}
+{#                    console.log('Directions request failed due to ' + status);#}
+{#                }#}
+{#            });#}
+{# var addresses = [];#}
+{#            {% for i in p %}#}
+{#            addresses.push("{{i}}");#}
+{#            {% endfor %}#}
+{##}
+{#             addresses.forEach(function(address, index) {#}
+{#                 alert(index)#}
+{#                 alert(address)#}
+{#                 alert(add_loc[index])#}
+{#                 var gg = address.split('**')#}
+{#var marker = new google.maps.Marker({#}
+{#					position: new google.maps.LatLng(add_loc[index]),#}
+{#					map: map,#}
+{#					title: gg[1].split('--')[0],#}
+{#					label: gg[1].split('--')[0]#}
+{#				});#}
+{##}
+{#				// Create an info window with a message for each marker#}
+{#				var infoWindow = new google.maps.InfoWindow({#}
+{#					content: '<div class="info-window">'+gg[1] +'</div>'#}
+{#				});#}
+{##}
+{#				// Add a click event listener to each marker#}
+{#				marker.addListener('click', (function(marker, infoWindow) {#}
+{#					return function() {#}
+{#						infoWindow.open(map, marker);#}
+{#					}#}
+{#				})(marker, infoWindow));#}
+{##}
+{#             });#}
+{##}
+{##}
+{#        }#}
+{#    </script>#}
+{#</body>#}
+{#</html>#}
+
+
+{% load static %}
+<html>
+<head>
+    <title>Plot Path on Google Maps</title>
+    <style>
+        #map {
+            height: 400px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="map"></div>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB3y0szjZmNj_w2q9Vnc08ZL_FU6Z4VTFE&callback=initMap" async defer></script>
+    <script>
+        function initMap() {
+            var map = new google.maps.Map(document.getElementById('map'),
+                {
+                center: {lat: 11.2577, lng: 75.784 },
+
+                zoom: 12
+            });
+
+            var addresses = [];
+{#            {% for i in p %}#}
+{#            addresses.push("{{i}}");#}
+{#            {% endfor %}#}
+
+
+ var markers = [
+{#                {#}
+{#                    position: {lat: {{lat}}, lng: {{lon}}},#}
+{#                    icon: '{%  static 'bi22.png' %}'#}
+{#                }#}
+            ];
+{% for i in p %}
+            markers.push({ position:{ lat:{{i.lat}}, lng:{{ i.long }} },
+            icon:'{%  static 'bi22.png' %}'
+            });
+            {% endfor %}
+console.log(markers);
+            markers.forEach(function(markerInfo) {
+                var marker = new google.maps.Marker({
+                    position: markerInfo.position,
+                    map: map,
+                    icon: markerInfo.icon
+                });
+            });
+
+            // Define addresses
+
+            // Geocode addresses and plot path
+{#            geocodeAddresses(addresses, map);#}
+        }
+        var add_loc=[];
+        function geocodeAddresses(addresses, map) {
+            var geocoder = new google.maps.Geocoder();
+            var waypoints = [];
+
+            // Geocode addresses asynchronously
+            addresses.forEach(function(address, index) {
+                var gg=address.split('**')
+                geocoder.geocode({'address': gg[0]}, function(results, status) {
+                    if (status === 'OK') {
+                        if (index === 0 || index === addresses.length - 1) {
+                            // Add start and end points as markers
+                            var marker = new google.maps.Marker({
+                                position: results[0].geometry.location,
+                                map: map,
+                                title: address
+                            });
+                        }
+                        add_loc.push(results[0].geometry.location)
+                        // Add waypoints for path
+                        waypoints.push({
+                            location: results[0].geometry.location,
+                            stopover: true
+                        });
+
+                        // Plot path if all addresses have been geocoded
+                        if (waypoints.length === addresses.length) {
+                            plotPath(waypoints, map);
+                        }
+                    } else {
+                        console.log('Geocode was not successful for the following reason: ' + status);
+                    }
+                });
+            });
+        }
+
+        function plotPath(waypoints, map) {
+            var directionsService = new google.maps.DirectionsService();
+            var directionsRenderer = new google.maps.DirectionsRenderer({
+                map: map
+            });
+
+            var request = {
+                origin: waypoints[0].location,
+                destination: waypoints[waypoints.length - 1].location,
+                waypoints: waypoints.slice(1, -1),
+                travelMode: google.maps.TravelMode.DRIVING
+            };
+
+            directionsService.route(request, function(result, status) {
+                if (status === 'OK') {
+                    directionsRenderer.setDirections(result);
+                } else {
+                    console.log('Directions request failed due to ' + status);
+                }
+            });
+
+
+        }
+    </script>
+</body>
+</html>
